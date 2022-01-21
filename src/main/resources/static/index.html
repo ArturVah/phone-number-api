@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="main" style="
+                            display: flex;
+                            justify-content: center;">
+    <p id="p"> Phone number </p>
+    <input id="phoneNumber" type="text" name="phoneNumber" style="margin: 0px 10px 0px 10px;">
+    <input id="btn" type="submit" value="Find country">
+    <div class="response">
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#btn').click(function () {
+            $(".response").html("");
+            var phone = $('#phoneNumber').val().replace('+', encodeURIComponent('+'));
+
+            if (phone.length === 0 || !phone.trim()) {
+                $('.response').append("Field can't be empty").css('color', 'red');
+                return;
+            }
+            if (phone.length > 30) {
+                $('.response').append("Number can't be longer than 30 symbols").css('color', 'red');
+                return;
+            }
+            $.ajax({
+                url: 'http://localhost:8080/api/resolve?number=' + phone,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function (k, v) {
+                        $.each(this, function (k, v) {
+                            if (v == null) {
+                                return true;
+                            }
+                            $('.response').append(v).css('color', '#555');
+                        })
+                    })
+                },
+                error: function (jqXHR, exception) {
+                    let jsonResponse = JSON.parse(jqXHR.responseText);
+                    let msg = jsonResponse["error"].message;
+                    $('.response').append(msg);
+                }
+            });
+        })
+    });
+</script>
+</body>
+</html>

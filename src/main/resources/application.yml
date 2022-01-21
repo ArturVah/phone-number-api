@@ -1,0 +1,5 @@
+internal:
+  wikipedia:
+    url: https://en.wikipedia.org/w/api.php?action=parse&format=json&page=List_of_country_calling_codes&prop=sections
+    tableUrl: https://en.wikipedia.org/w/api.php?action=parse&format=json&page=List_of_country_calling_codes&section=%d&disabletoc=1&prop=text
+    prefix: Alphabetical listing
